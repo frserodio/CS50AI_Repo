@@ -85,10 +85,13 @@ def main():
 
 
 def shortest_path(source, target):
-    # Keep track of number of states explored
-    num_explored = 0
+    """
+    Returns the shortest list of (movie_id, person_id) pairs
+    that connect the source to the target.
+    If no possible path, returns None.
+    """
 
-    # Initialize frontier to just the starting position
+    # Initialize frontier and add "source" as the first node
     start = Node(state=source, parent=None, action=None)
     frontier = QueueFrontier()
     frontier.add(start)
@@ -96,40 +99,15 @@ def shortest_path(source, target):
     # Initialize an empty explored set
     explored = set()
 
-    print(f"source {source} explored {explored} node {start.state} frontier {frontier.frontier[0].state} ")
-
-   
     # Keep looping until solution found
     while True:
 
-        # If nothing left in frontier, then no path
+        # If frontier is empty, then no path
         if frontier.empty():
-            raise Exception("no solution")
+            return None
 
         # Choose a node from the frontier
         node = frontier.remove()
-        num_explored += 1
-        print(f"node state {node.state}")
-
-        # If node is the goal, then we have a solution
-        if node.state == target:
-            actions = []
-            cells = []
-            while node.parent is not None:
-                actions.append(node.action)
-                cells.append(node.state)
-                node = node.parent
-            
-            actions.reverse()
-            
-            cells.reverse()
-            
-            solution = []
-			
-            for i in range(len(actions)):
-                solution.append((actions[i], cells[i]))
-            
-            return solution
 
         # Mark node as explored
         explored.add(node.state)
@@ -138,10 +116,17 @@ def shortest_path(source, target):
         for action, state in neighbors_for_person(node.state):
             if not frontier.contains_state(state) and state not in explored:
                 child = Node(state=state, parent=node, action=action)
-                frontier.add(child)
 
+                # If child is the goal, then we have a solution
+                if child.state == target:
+                    path = []
+                    while child.parent is not None:
+                        path.insert(0, (child.action, child.state))
+                        child = child.parent
 
-
+                    return path
+                else:
+                    frontier.add(child)
 
 
 def person_id_for_name(name):
@@ -181,18 +166,7 @@ def neighbors_for_person(person_id):
         for person_id in movies[movie_id]["stars"]:
             neighbors.add((movie_id, person_id))
     return neighbors
-    
-
-
 
 
 if __name__ == "__main__":
     main()
-
-print(neighbors_for_person('102'))
-
-# directory = r'C:\Users\fFSDA\Desktop\PythonLearning\CS50_AI\CS50AI_Repo\small'
-# load_data(directory)
-# print(people)
-# print(neighbors_for_person('102'))
-
