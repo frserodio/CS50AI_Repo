@@ -96,7 +96,7 @@ def shortest_path(source, target):
     # Initialize an empty explored set
     explored = set()
 
-    print(f"source {source} explored {explored} node {start.state} frontier {frontier.frontier[0].state} ")
+    # print(f"source {source} explored {explored} node {start.state} frontier {frontier.frontier[0].state} ")
 
    
     # Keep looping until solution found
@@ -109,7 +109,7 @@ def shortest_path(source, target):
         # Choose a node from the frontier
         node = frontier.remove()
         num_explored += 1
-        print(f"node state {node.state}")
+        # print(f"node state {node.state}")
 
         # If node is the goal, then we have a solution
         if node.state == target:
@@ -184,12 +184,9 @@ def neighbors_for_person(person_id):
     
 
 
-
-
 if __name__ == "__main__":
     main()
 
-print(neighbors_for_person('102'))
 
 # directory = r'C:\Users\fFSDA\Desktop\PythonLearning\CS50_AI\CS50AI_Repo\small'
 # load_data(directory)
